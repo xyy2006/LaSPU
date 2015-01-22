@@ -1,0 +1,6 @@
+sex
+bmi01
+v1age01.x
+age_sq
+pc1
+pc2

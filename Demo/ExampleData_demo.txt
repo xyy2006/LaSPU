@@ -1,0 +1,123 @@
+##################################################################################################################
+# Content: introduce the example data format as used in demo
+# Author: Yang Yang
+##################################################################################################################
+# 1,
+# ./: the program root path.
+# ./PhenotypeCovariateData/phe_cov_longitudinal_longFormat_sampleData.Rdata
+#---------------------------the phenotype and covariates shall be put within one R data.frame obj----------------#
+# The data in data.frame should follow the long format in longitudinal data analysis (use stats::reshape to do the job)
+# Forced columns (and fixed colnames): id, time.
+# id: the unique id of subjects. Since in long format, each id should have multiple rows representing multiple measurements.
+# time: this is for recording the order of each measurement within a subject. For missing data (usually at Y part), e.g. subject 1 only has 'tchol_longi' measurements at time = 1, 3, 4, you can either remove the 2nd row or still keep the row there with 'tchol_longi' = NA. For both situations, the program can take care. 
+> phe_cov_longitudinal_longFormat_sampleData
+           id DBP10 v1age01.x age_sq sex    bmi01     pc1     pc2    pc3     pc4     pc5 time age_longi agesq_longi
+   1: F100358    82        55   3025   1 26.12245  0.0077  0.0001 0.0068  0.0116 -0.0122    1        55        3025
+   2: F100358    82        55   3025   1 26.12245  0.0077  0.0001 0.0068  0.0116 -0.0122    2        58        3364
+   3: F100358    82        55   3025   1 26.12245  0.0077  0.0001 0.0068  0.0116 -0.0122    3        61        3721
+   4: F100358    82        55   3025   1 26.12245  0.0077  0.0001 0.0068  0.0116 -0.0122    4        64        4096
+   5: F100887    81        58   3364   1 32.15153 -0.0040  0.0108 0.0083 -0.0102  0.0064    1        58        3364
+  ---
+3996: W321302    71        45   2025   1 26.85363  0.0103 -0.0032 0.0126 -0.0172  0.0038    4        NA          NA
+3997: W322186    70        50   2500   0 27.86858 -0.0061  0.0115 0.0065  0.0021 -0.0083    1        50        2500
+3998: W322186    70        50   2500   0 27.86858 -0.0061  0.0115 0.0065  0.0021 -0.0083    2        53        2809
+3999: W322186    70        50   2500   0 27.86858 -0.0061  0.0115 0.0065  0.0021 -0.0083    3        56        3136
+4000: W322186    70        50   2500   0 27.86858 -0.0061  0.0115 0.0065  0.0021 -0.0083    4        NA          NA
+      tchol_longi hdl_longi ldl_longi trigs_longi
+   1:         152        40      96.8          76
+   2:         120        37      69.6          67
+   3:         176        37     120.0          95
+   4:         146        47      84.4          73
+   5:         236        35     143.6         287
+  ---
+3996:          NA        NA        NA          NA
+3997:         148        66      68.8          66
+3998:         176        53      96.0         135
+3999:         168        55      82.2         154
+4000:          NA        NA        NA          NA
+
+
+
+
+# 2,
+# ./GenotypeData/genotpe_data_sample.Rdata
+#---------------------------the genotype data as an R data.frame object----------------#
+# The data in data.frame should follow row:samples and columns:genotypes format, with the first column 'rn' fixed.
+# Forced columns (and fixed colnames): rn.
+# rn: the unique id of subjects. It is corresponding to the 'id' column in 'phe_cov_longitudinal_longFormat_sampleData'.
+> GT[,1:10,with=FALSE]
+           rn exm2268640 exm41 exm1916089 exm44 exm46 exm47 exm51 exm53 exm55
+   1: F100358         NA     0         NA     0     0     0     0     0     0
+   2: F100887         NA     0         NA     0     0     0     0     0     0
+   3: F101593         NA     0         NA     0     0     0     0     0     0
+   4: F101692         NA     0         NA     0     0     0     0     0     0
+   5: F103034         NA     0         NA     0     0     0     0     0     0
+  ---
+ 996: W319152         NA     0         NA     0     0     0     0     0     0
+ 997: W319361         NA     0         NA     0     0     0     0     0     0
+ 998: W321276         NA     0         NA     0     0     0     0     0     0
+ 999: W321302         NA     0         NA     0     0     0     0     0     0
+1000: W322186         NA     0         NA     0     0     0     0     0     0
+
+# 3,
+# ./AnnotationData/genotype_annotation.Rdata
+#---------------------------the genotype annotation as an R data.frame object----------------#
+# Forced columns (and fixed colnames): Name, Chr, MapInfo, single_gene.
+# Name: the SNV name from sequencing platform or other platforms
+# Chr: the chromosome
+# MapInfo: the physical location
+# single_gene: which single gene the SNV belongs to
+# ---optional columns--- #
+# For example:
+# dbSNPID: the standard SNV name, e.g. dbSNP142
+# SKATgene: you can have other choices to assign a SNV to a gene or an intergenic region, e.g. geneA|geneB
+# single_func_region: SNV location functional annotation
+# sc_exonic, sc_nonsynSplice, sc_lof, sc_damaging: binary variable indicating whether the SNV is within exonic region, etc.
+> snpinfo
+              Name Chr MapInfo     dbSNPID single_gene      SKATgene   single_func_region sc_exonic sc_nonsynSplice
+  1: exm-rs6685064   1 1211292   rs6685064          NA exm-rs6685064           intergenic     FALSE           FALSE
+  2:    exm2263810   1 1062638   rs9442373          NA    exm2263810           intergenic     FALSE           FALSE
+  3:       exm2290   1 1229225 rs145341583       ACAP3         ACAP3 exonic;nonsynonymous      TRUE            TRUE
+  4:       exm2326   1 1231185 rs200579243       ACAP3         ACAP3 exonic;nonsynonymous      TRUE            TRUE
+  5:       exm2328   1 1231208  rs61744741       ACAP3         ACAP3 exonic;nonsynonymous      TRUE            TRUE
+ ---
+496:       exm3397   1 1372441 rs144569033        VWA1          VWA1 exonic;nonsynonymous      TRUE            TRUE
+497:       exm3418   1 1372690 rs150022843        VWA1          VWA1 exonic;nonsynonymous      TRUE            TRUE
+498:       exm3425   1 1372743 rs144951633        VWA1          VWA1 exonic;nonsynonymous      TRUE            TRUE
+499:       exm3426   1 1372750 rs138662386        VWA1          VWA1 exonic;nonsynonymous      TRUE            TRUE
+500:       exm3429   1 1372773  rs11556017        VWA1          VWA1 exonic;nonsynonymous      TRUE            TRUE
+     sc_lof sc_damaging
+  1:  FALSE       FALSE
+  2:  FALSE       FALSE
+  3:  FALSE        TRUE
+  4:  FALSE       FALSE
+  5:  FALSE       FALSE
+ ---
+496:  FALSE       FALSE
+497:  FALSE       FALSE
+498:  FALSE       FALSE
+499:  FALSE       FALSE
+500:  FALSE       FALSE
+
+# 4,
+# ./CovariateNames/covariateNames.txt
+#---------------------------this file specifies the covariates we want to adjust for in the GEE model----------------#
+# the content is:
+sex
+bmi01
+v1age01.x
+age_sq
+pc1
+pc2
+# Please be noted, if the covariate is not a numeric variable but a categorical variable with more than 2 levels, you need to make it a 'factor' variable in the 'phe_cov_longitudinal_longFormat_sampleData' data.frame ('./PhenotypeCovariateData/phe_cov_longitudinal_longFormat_sampleData.Rdata'). Otherwise, the program will treat this covariate as a continuous numeric variable.
+# For example, 'gender' usually has more than two levels, you need to make it a factor variable in the 'phe_cov_longitudinal_longFormat_sampleData' data.frame, either coded as 0, 1, 2 or 'white', 'black', 'asian'.
+
+# 5, 
+# ./NodesProfile/MultipleNodes_profile.txt
+#---------------------------this file specifies the multiple nodes configuration for parallel computing----------------#
+# the content is:
+nodeName	cpus
+c341-312	12	# max:12, mem:24gb
+c341-311	12	# 
+c341-310	12	# max:24, mem:31gb
+ 

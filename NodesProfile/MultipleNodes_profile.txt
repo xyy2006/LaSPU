@@ -1,0 +1,11 @@
+# Content: The node profile configuration file
+########################################################################################
+nodeName	cpus
+c341-312	12	# max:12, mem:24gb
+c341-311	12	# 
+c341-310	12	# max:24, mem:31gb
+
+
+
+
+
