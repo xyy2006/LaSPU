@@ -56,7 +56,7 @@ catt <- function(...)
 # 3.
 naPlus <- function(x,y) {
     x[is.na(x)] <- 0;
-    y[is.na(x)] <- 0;
+    y[is.na(y)] <- 0;
     x + y 	# this allow pairwise +, not sum to a scalar.
 }
 # 4.
