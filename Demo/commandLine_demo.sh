@@ -40,7 +40,7 @@
                --jobExecuteOnMultipleNodes FALSE \
                --prefix singleNode_without_aSPU
 							 
-# no result							 
+# ./OutputData/singleNode_permutation_response:trigs_longi_genotpe_data_sample_wkCor:independence_bTime:1000_usePermutationU.Rdata
 #---3, single nodes parallel run using permutation method based empirical null U distribution---#
 ./assoc-aSPU.r --filename_genotype genotpe_data_sample.Rdata \
                --filename_annotation genotype_annotation.Rdata \
@@ -56,7 +56,7 @@
                --parallel_over_gene FALSE \
                --jobExecuteOnMultipleNodes FALSE \
                --prefix singleNode_permutation
-# no result
+# ./OutputData/multipleNodes_permutation_response:trigs_longi_genotpe_data_sample_wkCor:independence_bTime:1000_usePermutationU.Rdata
 #---4, multiple nodes parallel run using permutation method based empirical null U distribution---#
 ./assoc-aSPU.r --filename_genotype genotpe_data_sample.Rdata \
                --filename_annotation genotype_annotation.Rdata \
