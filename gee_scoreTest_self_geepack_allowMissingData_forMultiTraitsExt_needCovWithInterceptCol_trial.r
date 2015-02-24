@@ -395,7 +395,7 @@ geescore_for <- function(nCluster = NULL, data, id, y, cov = "intercept", par, w
             
         } else if (nrow(data_chunk) == 1) {
             # all goes in to scalar.
-            V <- v^2  # scalar, since one trait, no R is needed.
+            V <- v  # scalar, since one trait, no R is needed.
             U0 <- matrix(dev, ncol = 1) * c(y_resid)/V
             I0 <- matrix(dev, ncol = 1) %*% matrix(dev, nrow = 1) * c(vy)/V/V
             # BKi <- I0 AKi <- matrix(dev,ncol=1)%*%matrix(dev,nrow=1)/V
@@ -454,7 +454,7 @@ geescore_for <- function(nCluster = NULL, data, id, y, cov = "intercept", par, w
             
         } else if (nrow(data_chunk) == 1) {
             # all goes in to scalar.
-            V <- v^2  # scalar, since one trait, no R is needed.
+            V <- v  # scalar, since one trait, no R is needed.
             U0 <- matrix(dev, ncol = 1) * c(y_resid)/V
             I0 <- matrix(dev, ncol = 1) %*% matrix(dev, nrow = 1) * c(vy)/V/V
             # BKi <- I0 AKi <- matrix(dev,ncol=1)%*%matrix(dev,nrow=1)/V
@@ -508,7 +508,7 @@ geescore_for <- function(nCluster = NULL, data, id, y, cov = "intercept", par, w
             }
             
             if (max_longiN == 1) {
-                V <- v^2
+                V <- v
                 U0 <- matrix(dev, ncol = 1) * c(yy)/V
                 I0 <- matrix(dev, ncol = 1) %*% matrix(dev, nrow = 1) * c(vy_full)/V/V
             }
@@ -564,7 +564,7 @@ geescore_for <- function(nCluster = NULL, data, id, y, cov = "intercept", par, w
             }
             
             if (max_longiN == 1) {
-                V <- v^2
+                V <- v
                 U0 <- matrix(dev, ncol = 1) * c(yy)/V
                 I0 <- matrix(dev, ncol = 1) %*% matrix(dev, nrow = 1) * c(vy_full)/V/V
             }
