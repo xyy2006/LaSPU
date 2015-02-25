@@ -150,7 +150,6 @@ source("Tests5V1.r")	# execute Dr. Pan Wei's Score, SSU, SSUw, Sum, UminP tests.
 setwd(programRootPWD)
 #---send all functions to all nodes if cl exists---#
 if (exists("cl")) {
-	clusterExport(cl, c("source_file_PWD", "programRootPWD") )
 	clusterEvalQ(cl, {
 											setwd(source_file_PWD)
 											source("transform.r")
@@ -158,7 +157,6 @@ if (exists("cl")) {
 											source("gee_scoreTest_self_geepack_allowMissingData_forMultiTraitsExt_needCovWithInterceptCol_trial.r") # load geescore_parallel func, very slow
 											source("RV_permutation_longi.r") # load RV_permute_test
 											source("Tests5V1.r")	# execute Dr. Pan Wei's Score, SSU, SSUw, Sum, UminP tests.
-											setwd(programRootPWD)											
 									 })
 }
 # # clusterEvalQ(cl,ls())	# for debugging purpose.

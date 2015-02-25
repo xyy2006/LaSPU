@@ -58,8 +58,6 @@ suppressPackageStartupMessages(require(getopt))	# load necessary packages
 programRootPWD <-  getwd() 	# for later usage of root path.
 #---------record the OutputData path, where all the results produced go there.-----------# 
 outputPWD <- sprintf("%s/OutputData/",programRootPWD)
-#---------all kernel R scripts put here------------------------------#
-source_file_PWD <- sprintf("%s/R/",programRootPWD)
 #
 #---------setup the dumpto file for collecting errors---------------#
 if ( exists("prefix") ) {
@@ -106,9 +104,9 @@ setParallel <- function(parallel_scheme = parallel_scheme){
 			SNOW = {cl <<- makeSOCKcluster(detectCores())	# make it mutable object.
 					setDefaultCluster(cl)
 					registerDoSNOW(cl)
-					# #---need to send the path and point to the correct path on each slave node---
-					# clusterExport(cl, "programRootPWD")
-					# clusterEvalQ(cl,source( sprintf('%s/head.r',programRootPWD) )) # load necessary packages on each, slave must be given absolute path, REMEBER!
+					#---need to send the path and point to the correct path on each slave node---
+					clusterExport(cl, "programRootPWD")
+					clusterEvalQ(cl,source( sprintf('%s/head.r',programRootPWD) )) # load necessary packages on each, slave must be given absolute path, REMEBER!
 					# on.exit({stopCluster(cl)})	# turn if off savely, not put here, otherwise generate -> kill immediately.
 					},
 			SERIAL = registerDoSEQ() ,
@@ -128,9 +126,9 @@ if (!jEOM) {
 	setDefaultCluster(cl)
 	registerDoSNOW(cl)
 	#---need to send the path and point to the correct path on each slave node---
-	# clusterExport(cl, "programRootPWD")
-	# clusterEvalQ(cl,source( sprintf('%s/head.r',programRootPWD) )) # load necessary packages on each, slave must be given absolute path, REMEBER!
-	# on.exit({stopCluster(cl)})	# turn if off savely.
+	clusterExport(cl, "programRootPWD")
+	clusterEvalQ(cl,source( sprintf('%s/head.r',programRootPWD) )) # load necessary packages on each, slave must be given absolute path, REMEBER!
+	on.exit({stopCluster(cl)})	# turn if off savely.
 	catt("We have registered ",getDoParWorkers()," cpu(s) by ", shQuote(getDoParName()), "on machine: " )
 	print(m_n_profile)
 } else	{
@@ -141,26 +139,20 @@ if (!jEOM) {
 catt("Now we have ",getDoParWorkers(),  " cores running!")
 
 #====================source the kernal functions==========================#
-setwd(source_file_PWD)
 source("transform.r")
 source("aspuTest_parralled_withSco_RV_version_updatedScoreTest_within.r")	# load SPU3 func.
 source("gee_scoreTest_self_geepack_allowMissingData_forMultiTraitsExt_needCovWithInterceptCol_trial.r") # load geescore_parallel func, very slow
 source("RV_permutation_longi.r") # load RV_permute_test
 source("Tests5V1.r")	# execute Dr. Pan Wei's Score, SSU, SSUw, Sum, UminP tests.
-setwd(programRootPWD)
 #---send all functions to all nodes if cl exists---#
-if (exists("cl")) {
-	clusterExport(cl, c("source_file_PWD", "programRootPWD") )
-	clusterEvalQ(cl, {
-											setwd(source_file_PWD)
-											source("transform.r")
-											source("aspuTest_parralled_withSco_RV_version_updatedScoreTest_within.r")	# load SPU3 func.
-											source("gee_scoreTest_self_geepack_allowMissingData_forMultiTraitsExt_needCovWithInterceptCol_trial.r") # load geescore_parallel func, very slow
-											source("RV_permutation_longi.r") # load RV_permute_test
-											source("Tests5V1.r")	# execute Dr. Pan Wei's Score, SSU, SSUw, Sum, UminP tests.
-											setwd(programRootPWD)											
-									 })
-}
+if (exists("cl")) clusterEvalQ(cl, {
+															setwd(programRootPWD)
+															source("transform.r")
+															source("aspuTest_parralled_withSco_RV_version_updatedScoreTest_within.r")	# load SPU3 func.
+															source("gee_scoreTest_self_geepack_allowMissingData_forMultiTraitsExt_needCovWithInterceptCol_trial.r") # load geescore_parallel func, very slow
+															source("RV_permutation_longi.r") # load RV_permute_test
+															source("Tests5V1.r")	# execute Dr. Pan Wei's Score, SSU, SSUw, Sum, UminP tests.
+															})
 # # clusterEvalQ(cl,ls())	# for debugging purpose.
 ###############################################
 #------load data from here--------------------#
@@ -232,11 +224,11 @@ if (exists("covariateVarFile")) {
 	covNames <- c("intercept")
 }
 
-message("Data loaded, start computation!")
+
 if (!include_aSPU) {	# only 5 asymptotic tests, i.e., sum, SSU, SSUw, Score and UminP.
 		parallelFlag <- FALSE
 			#--run---#
-		testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=F) %dopar% {	# since asymptotic tests are fast, we prefer to parallel over genes.
+		testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=T) %dopar% {	# since asymptotic tests are fast, we prefer to parallel over genes.
 		 # registerDoMC(detectCores())	# for each in cl_mother
 		 # iter = nextElem(iterObj)	# for debugging usage.
 		 #----some limited QC here, more extensive QC should be done outside of this program----#
@@ -301,8 +293,8 @@ if (!include_aSPU) {	# only 5 asymptotic tests, i.e., sum, SSU, SSUw, Score and 
 	if (!parallel_over_gene) {	
 		parallelFlag <- TRUE
 		#--run---#
-		# testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=F) %dopar% {
-		testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=F) %do% {	# gene level in serial, within each gene, the computation is paralleled.
+		# testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=T) %dopar% {
+		testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=T) %do% {	# gene level in serial, within each gene, the computation is paralleled.
 
 		 # registerDoMC(detectCores())	# for each in cl_mother
 		 # iter = nextElem(iterObj)	# for debugging usage.
@@ -379,8 +371,8 @@ if (!include_aSPU) {	# only 5 asymptotic tests, i.e., sum, SSU, SSUw, Score and 
 	} else {
 		parallelFlag <- FALSE
 			#--run---#
-		testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=F) %dopar% {
-		# testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=F) %do% {	# gene level in serial, within each gene, the computation is paralleled.
+		testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=T) %dopar% {
+		# testResult <- foreach(iter = iterObj,.errorhandling = "pass",.verbose=T) %do% {	# gene level in serial, within each gene, the computation is paralleled.
 
 		 # registerDoMC(detectCores())	# for each in cl_mother
 		 # iter = nextElem(iterObj)	# for debugging usage.
