@@ -1,4 +1,4 @@
-#!/work/02040/yyang/Software/R/bin/Rscript --slave --vanilla
+#!/usr/bin/env Rscript --vanilla
 # Content: the main executable to run association test using aSPU methods.
 # Author: Yang Yang
 # Demo arguments:
