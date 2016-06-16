@@ -103,19 +103,25 @@
 # ./CovariateNames/covariateNames.txt
 #---------------------------this file specifies the covariates we want to adjust for in the GEE model----------------#
 # the content is:
+
 sex
 bmi01
 v1age01.x
 age_sq
 pc1
 pc2
+
 # Please be noted, if the covariate is not a numeric variable but a categorical variable with more than 2 levels, you need to make it a 'factor' variable in the 'phe_cov_longitudinal_longFormat_sampleData' data.frame ('./PhenotypeCovariateData/phe_cov_longitudinal_longFormat_sampleData.Rdata'). Otherwise, the program will treat this covariate as a continuous numeric variable.
 # For example, 'race' or 'ethnicity' usually has more than two levels, you need to make it a factor variable in the 'phe_cov_longitudinal_longFormat_sampleData' data.frame, either coded as 0, 1, 2 or 'white', 'black', 'asian'.
 
 # 5, 
 # ./NodesProfile/MultipleNodes_profile.txt
 #---------------------------this file specifies the multiple nodes configuration for parallel computing----------------#
+# Forced columns (and fixed colnames): nodeName, cpus.
+# nodeName: node's name in the cluster environment. That node must be valid for keyless-ssh-login, e.g. `ssh c341-312`. 
+# cpus: # of cores you want to use on the node.
 # the content is:
+
 nodeName	cpus
 c341-312	12	# max:12, mem:24gb
 c341-311	12	# 
