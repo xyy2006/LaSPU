@@ -110,7 +110,7 @@ age_sq
 pc1
 pc2
 # Please be noted, if the covariate is not a numeric variable but a categorical variable with more than 2 levels, you need to make it a 'factor' variable in the 'phe_cov_longitudinal_longFormat_sampleData' data.frame ('./PhenotypeCovariateData/phe_cov_longitudinal_longFormat_sampleData.Rdata'). Otherwise, the program will treat this covariate as a continuous numeric variable.
-# For example, 'gender' usually has more than two levels, you need to make it a factor variable in the 'phe_cov_longitudinal_longFormat_sampleData' data.frame, either coded as 0, 1, 2 or 'white', 'black', 'asian'.
+# For example, 'race' or 'ethnicity' usually has more than two levels, you need to make it a factor variable in the 'phe_cov_longitudinal_longFormat_sampleData' data.frame, either coded as 0, 1, 2 or 'white', 'black', 'asian'.
 
 # 5, 
 # ./NodesProfile/MultipleNodes_profile.txt
