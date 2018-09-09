@@ -1,0 +1,24 @@
+$ARGS
+character(0)
+
+$help
+[1] TRUE
+
+Usage: ./assoc-aSPU.r [-[-verbose|v]] [-[-help|h]] [-[-filename_genotype|f] <character>] [-[-filename_annotation|a] <character>] [-[-filename_phenotype|P] <character>] [-[-responseVarName|r] <character>] [-[-covariateVarFile|c] [<character>]] [-[-workingCorstr_input|w] <character>] [-[-include_aSPU|u] <logical>] [-[-b_times|b] <integer>] [-[-seed|s] [<integer>]] [-[-usePermutedU|U] <logical>] [-[-parallel_scheme|S] <character>] [-[-parallel_over_gene|g] <logical>] [-[-jobExecuteOnMultipleNodes|j] <logical>] [-[-MultipleNodes_profile|m] [<character>]] [-[-prefix|e] [<character>]]
+    -v|--verbose                      display verbose message printed
+    -h|--help                         call 'help' document
+    -f|--filename_genotype            the Rdata containing the genotype data you want to run program on as explanatory variables
+    -a|--filename_annotation          the Rdata containing the genotype data annotation
+    -P|--filename_phenotype           the Rdata containing the phenotype information and all covariate information as columns in a df/matrix.
+    -r|--responseVarName              specify the response variable name as the column in 'filename_phenotype' object, e.g. trigs_longi
+    -c|--covariateVarFile             Optional. When you want to adjust for covariates in the association study, specify the text filename (e.g. covariateNames.txt), which stores covariate variable names in the format of one name per line. The covariate info are stored together with responseVarName as in columns in 'filename_phenotype' object. See example file. 
+    -w|--workingCorstr_input          the Rw you want to use among 'independence', 'exchangeable', 'ar1' and 'unstructured'
+    -u|--include_aSPU                 TRUE: the analysis will execute default 5 tests and include aSPU family tests, which cost more time; FALSE: the analysis will only execute 5 tests (sum, SSU, SSUw, Score and UminP).
+    -b|--b_times                      the iterations for both simulation or permutation, recommend to start with 1e3 for first time genome-wide scan; then use 1e6 for only those significant genes in the initial scan stage (you only need to update the 'filename_annotation' to include only those significant genes). This option is only effective to aSPU family tests.
+    -s|--seed                         Optional. You can specify a random integer, say 1234, so that the result can be repeated in the future if you rerun the program on the same input files. The default seed is 123. This option is only effective to aSPU family tests
+    -U|--usePermutedU                 TRUE: use permutation method to get U null distribution; FALSE: use simulation method to get U null distribution according to MVN distribution. This option is only effective to aSPU family tests.
+    -S|--parallel_scheme              SERIAL, SNOW or MC (the latter two are parallel schemes. SNOW is memory efficient while communications among nodes cost heavily; MC is communications efficient while taking up much more memory). Recommend to use 'SERIAL', when you have a small sample size and a few genes; use 'MC' when your memory is big enough (e.g. single node with >= 32gb mem); use 'SNOW' when node memory is limited.
+    -g|--parallel_over_gene           TRUE: parallel computing over genes; FALSE: parallel computing within each gene while over genes serial computing is adopted. For small samples (e.g. <= 3000 subjects), recommend to use 'TRUE'; for larger samples, recommend to use 'FALSE'. If 'usePermutedU' = TRUE, always set it to 'FALSE'. This option doesn't matter when you use 'SERIAL' as the 'parallel_scheme'. 
+    -j|--jobExecuteOnMultipleNodes    TRUE of FALSE (parallel run on single node or multiple nodes. Only 'SNOW' supports the latter.)
+    -m|--MultipleNodes_profile        This options comes together with 'jobExecuteOnMultipleNodes'==TRUE. The file contains the configuration for the virtual cluster with multiple nodes you intent to use. Check the example file.
+    -e|--prefix                       Optional. It specifies the prefix you want to append to any output file names, e.g. specify 'Prefix1213' to make the output filename to be 'Prefix1213_Chromosome1ExomeChip.Rdata'
